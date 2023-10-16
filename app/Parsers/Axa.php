@@ -10,10 +10,12 @@ use Illuminate\Support\Collection;
 
 class Axa
 {
-    public $axaHtml;
+    private $axaHtml;
+    private $links;
 
     function __construct() {
         $this->axaHtml = $this->getStartHtml();
+        $this->links = $this->getLinks(); 
     }
 
     public function getStartHtml():HtmlDocument 
@@ -79,12 +81,10 @@ class Axa
 
     public function getContentTables():array
     {
-        
-        $links = $this->getLinks();
 
         $i = 0;
 
-        foreach ($links as $link) {
+        foreach ($this->links as $link) {
            $subPagesHtml[] = $this->getHtml($link);
            $tables[] = $subPagesHtml[$i]->find('.table-striped');
            $panels[] = $subPagesHtml[$i]->find('.panel-default');
@@ -100,13 +100,11 @@ class Axa
 
     public function getImages():array
     {
-        
-        $links = $this->getLinks();
 
         $i = 0;
         $j = 0;
 
-        foreach ($links as $link) {
+        foreach ($this->links as $link) {
            $subPagesHtml[] = $this->getHtml($link);
            $images[$i] = $subPagesHtml[$i]->find('.size-full');
            foreach ($images[$i] as $image) {

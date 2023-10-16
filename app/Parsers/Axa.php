@@ -26,29 +26,39 @@ class Axa
     
     }
 
-    public function getSubPage(string $link):HtmlDocument
+    public function getHtml(string $link):HtmlDocument 
     {
 
-        $axaSubPageHtml = new HtmlWeb();
-        $axaSubPageHtml = $axaSubPageHtml->load($link);
+        $axaHtml = new HtmlWeb();
+        $axaHtml = $axaHtml->load($link);
 
-        return $axaSubPageHtml;
+        return $axaHtml;
+    
+    }
+
+    public function getLinks()
+    {
+
+        $links = collect($this->axaHtml->find('a[rel=bookmark]'));
+
+        $links = $links->map(function ($links) {
+        return $links->href = config('parser.axa'). $links->href;
+        });
+
+    return $links;
 
     }
 
-    public function getTitlesAndLinks():Collection
+    public function getTitles():Collection
     {
 
-        $titlesAndLinks = collect($this->axaHtml->find('a[rel=bookmark]'));
+        $titles = collect($this->axaHtml->find('a[rel=bookmark]'));
 
-        $titlesAndLinks = $titlesAndLinks->map(function ($titlesAndLinks) {
-        return [
-            $titlesAndLinks->title,
-            $titlesAndLinks->href = config('parser.axa'). $titlesAndLinks->href
-            ];
+        $titles = $titles->map(function ($titles) {
+        return $titles->title;
         });
 
-    return $titlesAndLinks;
+    return $titles;
 
     }
 
@@ -70,15 +80,12 @@ class Axa
     public function getContentTables():array
     {
         
-        $links = $this->getTitlesAndLinks();
-        $links = $links->map(function ($link) {
-            return substr($link[1],strlen(config('parser.axa')));
-        });
+        $links = $this->getLinks();
 
         $i = 0;
 
         foreach ($links as $link) {
-           $subPagesHtml[] = $this->getSubPage($link);
+           $subPagesHtml[] = $this->getHtml($link);
            $tables[] = $subPagesHtml[$i]->find('.table-striped');
            $panels[] = $subPagesHtml[$i]->find('.panel-default');
            $content[] = preg_replace('|<div id="comments_wrap">[.\s\W\w]*<.div>|',
@@ -91,11 +98,34 @@ class Axa
 
     }
 
+    public function getImages():array
+    {
+        
+        $links = $this->getLinks();
+
+        $i = 0;
+        $j = 0;
+
+        foreach ($links as $link) {
+           $subPagesHtml[] = $this->getHtml($link);
+           $images[$i] = $subPagesHtml[$i]->find('.size-full');
+           foreach ($images[$i] as $image) {
+                $src[$i][$j] = $image->getAttribute('src');
+                $j++;
+           }
+           $i++;
+        }
+
+        return $src;
+
+    }
+
     public function save() {
 
-        $this->getTitlesAndLinks();
-        $this->getEndDates();
-        $this->getContentTables();
-        
+        // dump($this->getTitles());
+        // dump($this->getLinks());
+        // dump($this->getEndDates());
+        // return $this->getImages();
+        return $this->getContentTables();
     }
 }

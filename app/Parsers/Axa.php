@@ -118,12 +118,29 @@ class Axa
 
     }
 
+    public function getYears():array
+    {
+
+        $i = 0;
+
+        foreach ($this->links as $link) {
+           $subPagesHtml[] = $this->getHtml($link);
+           $years = collect($subPagesHtml[$i]->find('.articledetail tr td'));
+           $yearsOfProd[] = (int)substr(preg_replace("/[^0-9]/", "", $years[3]->_[5] ), -4);
+           $i++;
+        }
+
+        return $yearsOfProd;
+
+    }
+
     public function save() {
 
         // dump($this->getTitles());
         // dump($this->getLinks());
         // dump($this->getEndDates());
         // return $this->getImages();
-        return $this->getContentTables();
+        // return $this->getYears();
+        // return $this->getContentTables();
     }
 }

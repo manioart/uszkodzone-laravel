@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auctions', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('insurance');
-            $table->timestamp('end_date');
-            $table->integer('year_of_prod');
-            $table->text('content');
+            $table->morphs('fileable');
+            $table->string('original_name');
+            $table->string('path');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('auctions');
+        Schema::dropIfExists('files');
     }
 };

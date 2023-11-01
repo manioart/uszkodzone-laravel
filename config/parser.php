@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'axa' => env('PARSER_FIRST_URL', 'https://example.com/'),
+    'axa' => env('PARSER_URL', 'https://example.com/'),
 ];

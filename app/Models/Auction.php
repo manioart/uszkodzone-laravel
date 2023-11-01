@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\File;
 
 class Auction extends Model
 {
@@ -22,4 +24,14 @@ class Auction extends Model
         'year_of_prod',
         'content'
     ];
+
+    /**
+     * @return MorphMany
+     *
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
 }

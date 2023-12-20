@@ -8,7 +8,7 @@ use App\Models\File;
 use App\Services\FileService;
 use Exception;
 
-class Axa
+class Rest
 {
 
     const USER_AGENT = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.2309.372 Safari/537.36';
@@ -16,17 +16,50 @@ class Axa
 
     public function save() {
         
-        $curl = curl_init(config('parser.parser'));
+        $curl = curl_init(config('parser.parser').'/login');
+
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($curl, CURLOPT_COOKIEJAR, self::COOKIE_FILE);
+        curl_setopt($curl, CURLOPT_COOKIE, "cookiename=0");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_USERAGENT,"Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 0);
+
         curl_exec($curl);
     
         if (curl_errno($curl)) {
             throw new Exception(curl_error($curl));
         }
     
+        $html = curl_exec($curl);
+
+        $dom = new \DomDocument();
+        $dom->loadHTML($html);
+        $tokens = $dom->getElementsByTagName("input");
+        for ($i = 0; $i < $tokens->length; $i++) {
+            $meta = $tokens->item($i);
+            if($meta->getAttribute('name') == '_csrf_token')
+            $token = $meta->getAttribute('value');
+        }
+
+        $postValues = array(
+            'login' => config('parser.login'),
+            'password' => config('parser.password'),
+            '_csrf_token' => $token
+        );
+
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($postValues));
+        curl_exec($curl);
+
+        if (curl_errno($curl)) {
+            throw new Exception(curl_error($curl));
+        }
+
+        curl_setopt($curl, CURLOPT_URL, (config('parser.parser').'/rest'));
+        
         $html = curl_exec($curl);
     
         preg_match_all('|rel=.bookmark.[\s]*title=.[\#\&\;\s\)0-9a-zA-ZWÆÐƎƏƐƔĲŊŒẞÞǷȜæðǝəɛɣĳŋœĸſßþƿȝĄƁÇĐƊĘĦĮƘŁØƠŞȘŢȚŦŲƯY̨Ƴąɓçđɗęħįƙłøơşșţțŧųưy̨ƴÁÀÂÄǍĂĀÃÅǺĄÆǼǢƁĆĊĈČÇĎḌĐƊÐÉÈĖÊËĚĔĒĘẸƎƏƐĠĜǦĞĢƔáàâäǎăāãåǻąæǽǣɓćċĉčçďḍđɗðéèėêëěĕēęẹǝəɛġĝǧğģɣĤḤĦIÍÌİÎÏǏĬĪĨĮỊĲĴĶƘĹĻŁĽĿʼNŃN̈ŇÑŅŊÓÒÔÖǑŎŌÕŐỌØǾƠŒĥḥħıíìiîïǐĭīĩįịĳĵķƙĸĺļłľŀŉńn̈ňñņŋóòôöǒŏōõőọøǿơœŔŘŖŚŜŠŞȘṢẞŤŢṬŦÞÚÙÛÜǓŬŪŨŰŮŲỤƯẂẀŴẄǷÝỲŶŸȲỸƳŹŻŽẒŕřŗſśŝšşșṣßťţṭŧþúùûüǔŭūũűůųụưẃẁŵẅƿýỳŷÿȳỹƴźżžẓ+\/\(\,\.\-\']*.|', $html, $titles);
@@ -82,11 +115,11 @@ class Axa
             $temp_d = preg_replace('#<a data-toggle="collapse".data-parent="[a-zA-Z\W]*".href="[a-zA-Z\W]*".class="collapsing">#', "",$description);
             $temp_d = str_replace('</a>', "",$temp_d);
             $description = $temp_d;
-            preg_match('|1. Inv.[0-9\/\s\t\S]*Getriebe<[\/]td>|', $subpage, $year);
-            $temp_d = mb_substr($year[0],-53,4);
+            preg_match('/Pierwsza[\s]rejestracja:<.td><td>[\sa-zA-Z]*<.td><td>[a-zA-Zść\:\s]*<.td><td>[0-9\.]*.[0-9][0-9][0-9][0-9]|Pierwsza[\s]rejestracja:<.td><td>[0-9\.]*/', $subpage, $year);
+            $temp_d = mb_substr($year[0],-4);
             $year = $temp_d;
             $years[0][$i] = $year;
-            preg_match('|<p>[\s\W0-9a-zA-Z]*<br>[\s]*<.p>|', $subpage, $image);
+            preg_match('|<p>[\s\W0-9a-zA-Z\_]*<br>[\s]*<.p>|', $subpage, $image);
             $images[0][$i] = $image;
             $descriptions[0][$i] = implode(" ",$description);
         }
@@ -101,7 +134,7 @@ class Axa
                                 'title' => $titles[0][$i]
                             ],
                             [
-                                'insurance' => 'Axa',
+                                'insurance' => 'Rest',
                                 'end_date' => Carbon::parse($endDates[0][$i]),
                                 'content' => $descriptions[0][$i],
                                 'year_of_prod' => $years[0][$i]

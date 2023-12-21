@@ -5,6 +5,7 @@ use App\Parsers\Axa;
 use App\Parsers\SCC;
 use App\Parsers\Rest;
 use App\Parsers\Allianz;
+use App\Http\Controllers\AuctionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,5 @@ Route::get('/axa-download', [Axa::class, 'save']);
 Route::get('/scc-download', [SCC::class, 'save']);
 Route::get('/rest-download', [Rest::class, 'save']);
 Route::get('/allianz-download', [Allianz::class, 'save']);
+
+Route::get('/', [AuctionController::class, 'index']);

@@ -17,10 +17,6 @@ use App\Parsers\Allianz;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/axa-download', [Axa::class, 'save']);
 Route::get('/scc-download', [SCC::class, 'save']);
 Route::get('/rest-download', [Rest::class, 'save']);

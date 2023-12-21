@@ -15,8 +15,8 @@ class Allianz
     const COOKIE_FILE = 'cookie.txt';
 
     public function save() {
-        
-        $curl = curl_init(config('parser.parser').'/login');
+
+        $curl = curl_init(decrypt(config('parser.parser')).'/login');
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($curl, CURLOPT_COOKIEJAR, self::COOKIE_FILE);
@@ -45,8 +45,8 @@ class Allianz
         }
 
         $postValues = array(
-            'login' => config('parser.login'),
-            'password' => config('parser.password'),
+            'login' => decrypt(config('parser.login')),
+            'password' => decrypt(config('parser.password')),
             '_csrf_token' => $token
         );
 
@@ -58,7 +58,7 @@ class Allianz
             throw new Exception(curl_error($curl));
         }
 
-        curl_setopt($curl, CURLOPT_URL, (config('parser.parser').'/allianz'));
+        curl_setopt($curl, CURLOPT_URL, (decrypt(config('parser.parser')).'/allianz'));
         
         $html = curl_exec($curl);
     
@@ -96,7 +96,7 @@ class Allianz
     
         for ($i = 0; $i < count($links[0]); $i++) {
             $temp_l = str_replace('<a href="', "", $links[0][$i]);
-            $temp_l = config('parser.parser').$temp_l;
+            $temp_l = decrypt(config('parser.parser')).$temp_l;
             $links[0][$i] = $temp_l;
     
                 }
@@ -143,10 +143,10 @@ class Allianz
 
                         foreach ($srcArray[0] as $src) {
                             $src = str_replace('src="/images/','',$src);
-                            $src = config('parser.parser').'/images/' . $src;
+                            $src = decrypt(config('parser.parser')).'/images/' . $src;
                             $url = $src;
                             $src = str_replace('"', '', $src);
-                            $url = str_replace(config('parser.parser').'/images/', '', $url);
+                            $url = str_replace(decrypt(config('parser.parser')).'/images/', '', $url);
                             $url = preg_replace('#/#', '-', $url);
                             $url = str_replace('"', '', $url);
 

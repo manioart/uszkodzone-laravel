@@ -16,7 +16,7 @@ class Axa
 
     public function save() {
         
-        $curl = curl_init(config('parser.parser'));
+        $curl = curl_init(decrypt(config('parser.parser')));
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($curl, CURLOPT_COOKIEJAR, self::COOKIE_FILE);
@@ -63,7 +63,7 @@ class Axa
     
         for ($i = 0; $i < count($links[0]); $i++) {
             $temp_l = str_replace('<a href="', "", $links[0][$i]);
-            $temp_l = config('parser.parser').$temp_l;
+            $temp_l = decrypt(config('parser.parser')).$temp_l;
             $links[0][$i] = $temp_l;
     
                 }
@@ -110,10 +110,10 @@ class Axa
 
                         foreach ($srcArray[0] as $src) {
                             $src = str_replace('src="/images/','',$src);
-                            $src = config('parser.parser').'/images/' . $src;
+                            $src = decrypt(config('parser.parser')).'/images/' . $src;
                             $url = $src;
                             $src = str_replace('"', '', $src);
-                            $url = str_replace(config('parser.parser').'/images/', '', $url);
+                            $url = str_replace(decrypt(config('parser.parser')).'/images/', '', $url);
                             $url = preg_replace('#/#', '-', $url);
                             $url = str_replace('"', '', $url);
 

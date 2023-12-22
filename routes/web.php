@@ -24,3 +24,4 @@ Route::get('/rest-download', [Rest::class, 'save']);
 Route::get('/allianz-download', [Allianz::class, 'save']);
 
 Route::get('/', [AuctionController::class, 'index']);
+Route::resource('/auction', AuctionController::class);

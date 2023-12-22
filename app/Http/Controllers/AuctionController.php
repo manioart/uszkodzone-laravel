@@ -13,7 +13,13 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::where('end_date', '>', Carbon::now()->addHours(1))->get();
+        $auctions = Auction::where('end_date', '>', Carbon::now()->addHours(1))
+            ->get()
+            ->map(function($auction) {
+                $auction->title = substr($auction->title, 0, -14);
+        
+                return $auction;
+            });
 
         return inertia(
             'Auction/Index',

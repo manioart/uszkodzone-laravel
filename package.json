@@ -16,6 +16,7 @@
         "vue": "^3.3.13"
     },
     "dependencies": {
-        "@inertiajs/vue3": "^1.0.14"
+        "@inertiajs/vue3": "^1.0.14",
+        "vue-flatpickr-component": "^11.0.3"
     }
 }

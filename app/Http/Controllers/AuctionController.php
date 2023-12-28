@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Auction;
 use Illuminate\Support\Carbon;
+use App\Http\Requests\AuctionRequest;
 
 class AuctionController extends Controller
 {
@@ -16,8 +17,9 @@ class AuctionController extends Controller
         $auctions = Auction::where('end_date', '>', Carbon::now()->addHours(1))
             ->get()
             ->map(function($auction) {
-                $auction->title = substr($auction->title, 0, -14);
-        
+                if (is_numeric(substr($auction->title,-14))) {
+                    $auction->title = substr($auction->title, 0, -14);
+                }
                 return $auction;
             });
 
@@ -40,9 +42,12 @@ class AuctionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AuctionRequest $request)
     {
-        //
+        Auction::create($request->validated());
+
+        return redirect()->route('auction.index')
+            ->with('success', 'Aukcja została utworzona');
     }
 
     /**

@@ -57,7 +57,7 @@ const form = useForm({
   content: '',
 })
 
-const create = () => form.post('/auction',form)
+const create = () => form.post(route('auction.store'))
 
 const config = ref({
   enableTime: true,

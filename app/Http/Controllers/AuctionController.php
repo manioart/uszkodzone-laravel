@@ -79,9 +79,12 @@ class AuctionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Auction $auction)
+    public function update(AuctionRequest $request, Auction $auction)
     {
-        //
+        $auction->update($request->validated());
+
+        return redirect()->route('auction.index')
+            ->with('success', 'Aukcja została zmieniona');
     }
 
     /**
@@ -89,6 +92,9 @@ class AuctionController extends Controller
      */
     public function destroy(Auction $auction)
     {
-        //
+        $auction->delete();
+
+        return redirect()->back()
+            ->with('success', 'Aukcja została usunięta');
     }
 }

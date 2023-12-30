@@ -36,9 +36,9 @@
           {{ form.errors.content }}
         </div>
       </div>
-      <dv>
+      <div>
         <button type="submit">Edytuj</button>
-      </dv>
+      </div>
     </div>
   </form>
 </template>

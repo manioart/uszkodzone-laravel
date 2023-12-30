@@ -18,10 +18,11 @@ class AuctionController extends Controller
             ->get()
             ->map(function($auction) {
                 if (is_numeric(substr($auction->title,-14))) {
-                    $auction->title = substr($auction->title, 0, -14);
+                    $auction->title = preg_replace('/&[\w\W]*;/',"",substr($auction->title, 0, -14));
                 }
                 return $auction;
-            });
+            })
+            ->load('files');
 
         return inertia(
             'Auction/Index',
@@ -30,7 +31,7 @@ class AuctionController extends Controller
             ]
         );
     }
-
+         
     /**
      * Show the form for creating a new resource.
      */
@@ -55,10 +56,12 @@ class AuctionController extends Controller
      */
     public function show(Auction $auction)
     {
+        $auction->title = preg_replace('/&[\w\W]*;/',"",substr($auction->title, 0, -14));
+
         return inertia(
             'Auction/Show',
             [
-                'auction' => $auction
+                'auction' => $auction->load('files')
             ]
         );
     }

@@ -2,6 +2,8 @@ import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import MainLayout from '@/Layouts/MainLayout.vue'
 import { ZiggyVue } from 'ziggy'
+import CKEditor from '@ckeditor/ckeditor5-vue'
+import '../css/app.css'
 
 createInertiaApp({
   resolve: async (name) => {
@@ -15,6 +17,7 @@ createInertiaApp({
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(ZiggyVue)
+      .use(CKEditor)
       .mount(el)
   },
 })

@@ -9,7 +9,7 @@
           <Link :href="route('auction.index')">Licytacje ze Szwajcarii</Link>
         </div>
         <div>
-          <Link :href="route('auction.create')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium p-2 rounded-md">+ Nowa Aukcja</Link>
+          <Link :href="route('auction.create')" class="btn-primary">+ Nowa Aukcja</Link>
         </div>
       </nav>
     </div>

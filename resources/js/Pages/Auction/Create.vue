@@ -2,45 +2,43 @@
   <form @submit.prevent="create">
     <div class="grid grid-cols-6 gap-4">
       <div class="col-span-5">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Tytuł</label>
-        <input v-model="form.title" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
-        <div v-if="form.errors.title">
+        <label class="label">Tytuł</label>
+        <input v-model="form.title" type="text" class="input" />
+        <div v-if="form.errors.title" class="input-error">
           {{ form.errors.title }}
         </div>
       </div>
       <div class="col-span-1">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Rok pierwszej rejestracji</label>
-        <input v-model.number="form.year_of_prod" type="number" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
-        <div v-if="form.errors.year_of_prod">
+        <label class="label">Rok pierwszej rejestracji</label>
+        <input v-model.number="form.year_of_prod" type="number" class="input" />
+        <div v-if="form.errors.year_of_prod" class="input-error">
           {{ form.errors.year_of_prod }}
         </div>
       </div>
       <div class="col-span-3">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Ubezpieczalnia</label>
-        <input v-model="form.insurance" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
-        <div v-if="form.errors.insurance">
+        <label class="label">Ubezpieczalnia</label>
+        <input v-model="form.insurance" type="text" class="input" />
+        <div v-if="form.errors.insurance" class="input-error">
           {{ form.errors.insurance }}
         </div>
       </div>
       <div class="col-span-3">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Koniec aukcji</label>
-        <flat-pickr v-model="form.end_date" :config="config" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
-        <div v-if="form.errors.end_date">
+        <label class="label">Koniec aukcji</label>
+        <flat-pickr v-model="form.end_date" :config="config" class="input" />
+        <div v-if="form.errors.end_date" class="input-error">
           {{ form.errors.end_date }}
         </div>
       </div>
       
       <div class="col-span-6">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Szczegóły aukcji</label>
-        <div id="app">
-          <ckeditor v-model="form.content" :editor="ClassicEditor" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
-        </div>
-        <div v-if="form.errors.content">
+        <label class="label">Szczegóły aukcji</label>
+        <ckeditor v-model="form.content" :editor="ClassicEditor" class="input" />
+        <div v-if="form.errors.content" class="input-error">
           {{ form.errors.content }}
         </div>
       </div>
       <div>
-        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium p-2 rounded-md">Utwórz</button>
+        <button type="submit" class="btn-primary">Utwórz</button>
       </div>
     </div>
   </form>

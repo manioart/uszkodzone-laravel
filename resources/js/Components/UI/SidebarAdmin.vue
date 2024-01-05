@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="isOpen ? 'w-40' : 'w-60'"
+    :class="isOpen ? 'w-30' : 'w-60'"
     class="flex flex-col h-screen p-3 duration-300 bg-gray-800 shadow"
   >
     <div class="space-y-3">

@@ -66,13 +66,3 @@ const config = ref({
   dateFormat: 'Y-m-d H:i',          
 })
 </script>
-
-<style scoped>
-  label {
-    margin-right: 2px;
-  }
-
-  div {
-    padding: 2px;
-  }
-</style>

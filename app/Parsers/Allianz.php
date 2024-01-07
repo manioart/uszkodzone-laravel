@@ -115,7 +115,7 @@ class Allianz
             $temp_d = preg_replace('#<a data-toggle="collapse".data-parent="[a-zA-Z\W]*".href="[a-zA-Z\W]*".class="collapsing">#', "",$description);
             $temp_d = str_replace('</a>', "",$temp_d);
             $description = $temp_d;
-            preg_match('/Pierwsza[\s]rejestracja:<.td><td>[\sa-zA-Z]*<.td><td>[a-zA-Zść\:\s]*<.td><td>[0-9\.]*.[0-9][0-9][0-9][0-9]|Pierwsza[\s]rejestracja:<.td><td>[0-9\.]*/', $subpage, $year);
+            preg_match('|1. Inv.[0-9\/\s\t\S]*Getriebe<[\/]td>|', $subpage, $year);
             $temp_d = mb_substr($year[0],-4);
             $year = $temp_d;
             $years[0][$i] = $year;

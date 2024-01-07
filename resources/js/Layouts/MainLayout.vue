@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div v-if="admin">
+    <div v-if="user.is_admin">
       <SidebarAdmin />
     </div>
     <div class="container mx-auto mt-12">
@@ -23,7 +23,7 @@ const page = usePage()
 const flashSuccess = computed(
   () => page.props.flash.success,
 )
-const admin = computed(
-  () => page.props.user.is_admin,
+const user = computed(
+  () => page.props.user,
 )
 </script>

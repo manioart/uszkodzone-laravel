@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div>
+    <div v-if="admin">
       <SidebarAdmin />
     </div>
     <div class="container mx-auto mt-12">
@@ -22,5 +22,8 @@ import {computed} from 'vue'
 const page = usePage()
 const flashSuccess = computed(
   () => page.props.flash.success,
+)
+const admin = computed(
+  () => page.props.user !== null ? page.props.user.is_admin : false,
 )
 </script>

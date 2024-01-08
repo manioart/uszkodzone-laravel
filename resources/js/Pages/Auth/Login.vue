@@ -25,7 +25,6 @@
   
 <script setup>
 import {useForm, Link} from '@inertiajs/vue3'
-import { useTheme } from 'vuetify'
 
 const form = useForm({
   email: null,
@@ -34,7 +33,3 @@ const form = useForm({
 
 const login = () => form.post(route('login.store'))
 </script>
-
-<style lang="scss">
-@use "@core-scss/pages/page-auth.scss";
-</style>

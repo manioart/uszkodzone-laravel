@@ -4,8 +4,7 @@ import MainLayout from '@/Layouts/MainLayout.vue'
 import { ZiggyVue } from 'ziggy'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import { InertiaProgress } from '@inertiajs/progress'
-import '@core-scss/template/index.scss'
-import '@layouts/styles/index.scss'
+import '../css/app.css'
 
 InertiaProgress.init({
   delay: 0,

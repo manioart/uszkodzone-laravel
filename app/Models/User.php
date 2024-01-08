@@ -52,4 +52,15 @@ class User extends Authenticatable
             set: fn ($value) => Hash::make($value),
         );
     }
+
+    public function bids() 
+    {
+        return $this->hasMany(Bid::class);
+    }
+
+    public function favorites() 
+    {
+        return $this->hasMany(Favorite::class);
+    
+    }
 }

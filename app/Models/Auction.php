@@ -34,4 +34,8 @@ class Auction extends Model
         return $this->morphMany(File::class, 'fileable');
     }
 
+    public function bids() 
+    {
+        return $this->hasMany(Bid::class);
+    }
 }
